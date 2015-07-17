@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Google Newspaper</title>
+	<style>
+	input{
+		display:block;
+	}
+	input[type="number"]{
+		width:50px;
+	}
+	img{
+		margin: -2px 0px -2px 0px;
+		border: 1px solid #3363AD;
+	}
+	</style>
+</head>
+
+<body>
+<label>Amount of image sections to grab:<input id="amount" type="number"></label>
+<label>Please enter a <em>valid</em> Google Archive URL: <input id="url" type="text"> </label>
+<input value="Generate" id="button" type="button">
+<div id="images"></div>
+
+<script type="text/javascript">
+//Elements
+var inputURL = document.getElementById("url"),
+    inputAmount = document.getElementById("amount"),
+    inputButton = document.getElementById("button"),
+    imageContainer = document.getElementById("images");
+
+inputButton.addEventListener("click", function(){
+	var URL = inputURL.value,
+	    amount = inputAmount.value;
+
+	getImage(URL, amount);
+});
+
+var ImageSegment = function(url){
+	this.url = url;
+};
+
+var segments = [];
+var images = [];
+
+function getImage(url,amount){
+	url = url + "&img=1&zoom=3&tid=";
+
+	for(i = 0; i < amount; i++){
+		segments.push(new ImageSegment(url+i));
+	}
+	displaySegments();
+}
+
+function displaySegments(){
+	//empty the images array and clear any image segments from the container
+	images = [];
+	
+
+	for(i = 0; i < segments.length; i++){
+		console.log(i);
+
+		var imgElement = new Image(128,128);
+		imgElement.src = segments[i].url;
+		images.push(imgElement);
+		if(i%3 === 0){
+			var br = document.createElement("br");
+			imageContainer.appendChild(br);
+			imageContainer.appendChild(images[i]);
+		}else{
+			imageContainer.appendChild(images[i]);
+		}
+	}
+
+}
+
+
+</script>
+</body>
+</html>
